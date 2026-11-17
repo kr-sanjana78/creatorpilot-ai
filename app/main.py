@@ -3,6 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.config import settings
 from app.database import connect_to_mongo, close_mongo_connection
 from app.routers import auth
+from app.routers.ai import router as ai_router  # Import your AI router
 
 app = FastAPI(title="CreatorPilot AI API")
 
@@ -14,16 +15,9 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-@app.on_event("startup")
-async def startup_db_client():
-    await connect_to_mongo()
-
-@app.on_event("shutdown")
-async def shutdown_db_client():
-    await close_mongo_connection()
-
-# Include authentication router
+# Register your routers
 app.include_router(auth.router)
+app.include_router(ai_router)  # Register the AI router here
 
 @app.get("/api/health")
 async def health():
