@@ -3,6 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.config import settings
 from app.database import connect_to_mongo, close_mongo_connection
 from app.routers import auth
+from app.routers.ai import router as ai_router
 
 app = FastAPI(title="CreatorPilot AI API")
 
