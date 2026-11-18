@@ -1,0 +1,12 @@
+services:
+  - type: web
+    name: creatorpilot-backend
+    runtime: python
+    rootDir: backend
+    buildCommand: pip install -r requirements.txt
+    startCommand: python -m uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.0
+      - key: MONGO_URI
+        value: "mongodb+srv://sanjana:CreatorPilot20292@cluster0.nskjiky.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
