@@ -29,4 +29,4 @@ app.include_router(auth.router, prefix="/api", tags=["Auth"])
 
 @app.get("/")
 def read_root():
-    return {"status": "online", "message": "CreatorPilot AI Backend is running"}
+    return {"status": "online", "message": "CreatorPilot AI Backend is running"}ss
