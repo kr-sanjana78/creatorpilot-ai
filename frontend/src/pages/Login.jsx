@@ -13,12 +13,13 @@ export default function Login() {
     
     try {
       console.log("Attempting to connect to backend with:", email);
-      const response = await api.post('/api/login', { email, password });
+      const response = await api.post('/api/auth/login', { email, password });
       console.log('Login successful response:', response.data);
       alert('Login successful!');
     } catch (err) {
       console.error("Login error details:", err);
-      setError('Could not connect to the backend server.');
+      const errorMsg = err.response?.data?.detail || 'Could not connect to the backend server.';
+      setError(errorMsg);
     }
   };
 
@@ -46,8 +47,7 @@ export default function Login() {
           />
         </div>
         <button 
-          type="button" 
-          onClick={handleLogin}
+          type="submit" 
           style={{ padding: '10px 20px', background: 'blue', color: 'white', border: 'none', cursor: 'pointer' }}
         >
           Login
