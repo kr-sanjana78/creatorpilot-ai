@@ -1,24 +1,10 @@
-const API_BASE = 'http://127.0.0.1:8000/api';
+import axios from 'axios';
 
-export async function apiCall(endpoint, method = 'GET', body = null) {
-  const token = localStorage.getItem('token');
-  const headers = { 'Content-Type': 'application/json' };
-  
-  if (token) {
-    headers['Authorization'] = `Bearer ${token}`;
-  }
+const api = axios.create({
+  baseURL: 'https://creatorpilot-backend-70xt.onrender.com',
+  headers: {
+    'Content-Type': 'application/json',
+  },
+});
 
-  const response = await fetch(`${API_BASE}${endpoint}`, {
-    method,
-    headers,
-    body: body ? JSON.stringify(body) : null,
-  });
-
-  const data = await response.json();
-  
-  if (!response.ok) {
-    throw new Error(data.detail || 'Something went wrong');
-  }
-
-  return data;
-}
+export default api;

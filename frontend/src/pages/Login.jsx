@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import api from '../services/api';
 
 export default function Login() {
   const [email, setEmail] = useState('');
@@ -6,51 +7,49 @@ export default function Login() {
   const [error, setError] = useState('');
 
   const handleLogin = async (e) => {
-    e.preventDefault();
+    if (e) e.preventDefault();
+    console.log("=== LOGIN BUTTON CLICKED ===");
     setError('');
-
+    
     try {
-      const response = await fetch('http://127.0.0.1:8000/api/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password }),
-      });
-
-      const data = await response.json();
-
-      if (response.ok) {
-        localStorage.setItem('token', data.access_token);
-        window.location.href = '/dashboard';
-      } else {
-        setError(data.detail || 'Invalid email or password');
-      }
+      console.log("Attempting to connect to backend with:", email);
+      const response = await api.post('/api/login', { email, password });
+      console.log('Login successful response:', response.data);
+      alert('Login successful!');
     } catch (err) {
+      console.error("Login error details:", err);
       setError('Could not connect to the backend server.');
     }
   };
 
   return (
-    <div style={{ maxWidth: '400px', margin: '4rem auto', padding: '2rem', fontFamily: 'sans-serif' }}>
-      <h2>CreatorPilot AI - Login</h2>
-      {error && <p style={{ color: 'red' }}>{error}</p>}
-      <form onSubmit={handleLogin} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-        <input
-          type="email"
-          placeholder="Email address"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-          style={{ padding: '0.75rem', fontSize: '1rem' }}
-        />
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-          style={{ padding: '0.75rem', fontSize: '1rem' }}
-        />
-        <button type="submit" style={{ padding: '0.75rem', background: '#2563eb', color: '#fff', border: 'none', cursor: 'pointer', fontSize: '1rem' }}>
+    <div style={{ padding: '50px', fontFamily: 'Arial' }}>
+      <form onSubmit={handleLogin}>
+        <h2>CreatorPilot AI - Login</h2>
+        {error && <div style={{ color: 'red', marginBottom: '10px' }}>{error}</div>}
+        <div style={{ margin: '10px 0' }}>
+          <input 
+            type="email" 
+            value={email} 
+            onChange={(e) => setEmail(e.target.value)} 
+            placeholder="test@creatorpilot.ai" 
+            style={{ padding: '8px', width: '250px' }}
+          />
+        </div>
+        <div style={{ margin: '10px 0' }}>
+          <input 
+            type="password" 
+            value={password} 
+            onChange={(e) => setPassword(e.target.value)} 
+            placeholder="Password" 
+            style={{ padding: '8px', width: '250px' }}
+          />
+        </div>
+        <button 
+          type="button" 
+          onClick={handleLogin}
+          style={{ padding: '10px 20px', background: 'blue', color: 'white', border: 'none', cursor: 'pointer' }}
+        >
           Login
         </button>
       </form>
