@@ -1,13 +1,13 @@
-"""backend/main.py
+""""backend/main.py
 
 FastAPI application entry point. Registers all routers.
 """
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from backend.config import settings
-from backend.database import connect_to_mongo, close_mongo_connection
-from backend.routers import auth, calendar, thumbnails, audience, brand, dashboard
+from config import settings
+from database import connect_to_mongo, close_mongo_connection
+from routers import auth, calendar, thumbnails, audience, brand, dashboard
 
 app = FastAPI(title="CreatorPilot AI API")
 
