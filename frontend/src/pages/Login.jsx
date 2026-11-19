@@ -8,11 +8,9 @@ export default function Login() {
 
   const handleLogin = async (e) => {
     if (e) e.preventDefault();
-    console.log("=== LOGIN BUTTON CLICKED ===");
     setError('');
     
     try {
-      console.log("Attempting to connect to backend with:", email);
       const response = await api.post('/api/auth/login', { email, password });
       console.log('Login successful response:', response.data);
       alert('Login successful!');

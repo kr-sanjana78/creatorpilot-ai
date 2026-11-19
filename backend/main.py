@@ -1,19 +1,19 @@
 """backend/main.py
 
-FastAPI application entry point. Registers all routers.
+FastAPI application entry point. Registers all routers with absolute backend prefix.
 """
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from config import settings
-from database import connect_to_mongo, close_mongo_connection
-from routers import auth, calendar, thumbnails, audience, brand, dashboard
+from backend.config import settings
+from backend.database import connect_to_mongo, close_mongo_connection
+from backend.routers import auth, calendar, thumbnails, audience, brand, dashboard
 
 app = FastAPI(title="CreatorPilot AI API")
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Allows all origins for local testing
+    allow_origins=[settings.FRONTEND_ORIGIN],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -27,7 +27,7 @@ async def startup_db_client():
 async def shutdown_db_client():
     await close_mongo_connection()
 
-# Include authentication router with /api/auth prefix
+# Include authentication router with prefix
 app.include_router(auth.router, prefix="/api/auth", tags=["Authentication"])
 
 # Include calendar & kanban router
