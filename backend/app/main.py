@@ -23,8 +23,8 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Include Authentication Router (using a clean prefix to avoid duplicates)
-app.include_router(auth.router, prefix="/api", tags=["Authentication"])
+# Include Authentication Router without the extra /api prefix so it matches /auth/login directly
+app.include_router(auth.router, prefix="/auth", tags=["Authentication"])
 
 @app.get("/")
 async def read_root():
