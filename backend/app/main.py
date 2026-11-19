@@ -3,32 +3,24 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.database import connect_to_mongo, close_mongo_connection
 from app.routers import auth
 
-app = FastAPI(title="CreatorPilot AI Backend")
+app = FastAPI()
 
-# Updated CORS middleware allowing both port 5173 and 5174
+# CORS configuration to allow your React frontend and Render backend
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "http://localhost:5173",
-        "http://127.0.0.1:5173",
-        "http://localhost:5174",
-        "http://127.0.0.1:5174"
-    ],
+    allow_origins=["http://localhost:5173", "https://creatorpilot-backend-70xt.onrender.com"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-@app.on_event("startup")
-async def startup_event():
-    connect_to_mongo()
+# Database event handlers
+app.add_event_handler("startup", connect_to_mongo)
+app.add_event_handler("shutdown", close_mongo_connection)
 
-@app.on_event("shutdown")
-async def shutdown_event():
-    close_mongo_connection()
+# Include routers
+app.include_router(auth.router, prefix="/api", tags=["Auth"])
 
 @app.get("/")
-def read_root():
-    return {"status": "online", "message": "CreatorPilot AI Backend is running"}
-
-app.include_router(auth.router, prefix="/api", tags=["Auth"])
+def root():
+    return {"message": "CreatorPilot AI Backend is running!"}
